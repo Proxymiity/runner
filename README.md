@@ -16,7 +16,7 @@ Here's a project example:
     I know that comments in JSON are NOT permitted. But this is an example config.
     Please remove them if you copy that one.
 -->
-```JSON
+```py
 {
   "git": {
     "user": "Proxymiity",           # This constructs a GitHub URL:
