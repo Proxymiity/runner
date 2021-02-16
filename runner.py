@@ -35,11 +35,11 @@ while True:
         if p_folder.exists():
             print("Removing and cloning project...")
             shutil.rmtree(project["runner"]["project_folder"])
-            for x in project["events"]["before_clone"]:
-                print(x)
-                os.system(x)
-            os.system("git clone " + p_url + " " + project["runner"]["project_folder"] + " " +
-                      project["git"]["arguments"])
+        for x in project["events"]["before_clone"]:
+            print(x)
+            os.system(x)
+        os.system("git clone " + p_url + " " + project["runner"]["project_folder"] + " " +
+                  project["git"]["arguments"])
     else:
         if not p_folder.exists():
             print("Cloning project...")
