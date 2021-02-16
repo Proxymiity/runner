@@ -1,0 +1,33 @@
+{
+  "git": {
+    "user": "Proxymiity",
+    "repo": "runner",
+    "branch": "main",
+    "arguments": ""
+  },
+  "python": {
+    "virtualenv": {
+      "active": true,
+      "name": "venv"
+    },
+    "pip_packages": [],
+    "executable": "python",
+    "folder" : "/",
+    "target": "runner.py"
+  },
+  "events": {
+    "before_clone": [],
+    "after_clone" : [],
+    "before_run": [],
+    "after_run": []
+  },
+  "runner": {
+    "ignore_root_errors": false,
+    "run_indefinitely": false,
+    "run_indefinitely_on_nonzeroEC": false,
+    "sleep_secs_between_runs": 1,
+    "delete_before_each_run": false,
+    "just_update": false,
+    "project_folder": "runner"
+  }
+}
