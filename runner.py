@@ -99,9 +99,8 @@ while True:
         print("Done. Program ran one time.")
         exit(0)
 
-    if project["runner"]["run_indefinitely_on_nonzeroEC"] is False:
-        if target_run != 0:
-            print("Done with errors.")
-            exit(-1)
+    if project["runner"]["run_indefinitely_on_nonzeroEC"] is False and target_run != 0:
+        print("Done with errors.")
+        exit(-1)
 
     time.sleep(project["runner"]["sleep_secs_between_runs"])
