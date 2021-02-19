@@ -5,6 +5,15 @@ import shutil
 import ctypes
 import platform
 import time
+import subprocess
+
+try:
+    __version__ = subprocess.check_output(['git', 'rev-parse', '--short', 'HEAD']).decode('utf-8').strip()
+except subprocess.CalledProcessError:
+    __version__ = "Unknown - LKC 0fc21b"
+
+print("Proxymiity/runner - Version " + __version__)
+print("Licensed under the Apache 2 License")
 
 try:
     perms = os.getuid() == 0
@@ -15,11 +24,14 @@ print("Opening project.json file")
 with open("project.json", encoding="utf-8", mode="r") as f:
     project = json.load(f)
 
+print("Project: " + project["project"]["name"])
+print("         " + project["project"]["desc"])
+
 if perms is False:
     if project["runner"]["ignore_root_errors"] is True:
         print("Not using root privileges. Proceed carefully.")
     else:
-        print("You are not using root/admin privileges. Please consider running this as administrator to avoid"
+        print("Error: You are not using root/admin privileges. Please consider running this as administrator to avoid"
               " an issue while deleting files. If you are AWARE of this and want to continue, please set"
               " ignore_root_errors to true in the project.json.")
         exit(-99)
@@ -30,31 +42,35 @@ p_runner = Path(str(p_folder) + project["python"]["folder"])
 p_executable = Path(str(p_runner) + "/" + project["python"]["target"])
 p_url = "https://github.com/" + project["git"]["user"] + "/" + project["git"]["repo"]
 
+
+def event(name: str):
+    print("Processing event " + name)
+    for x in project["events"][name]:
+        print(x)
+        os.system(x)
+
+
 while True:
     if project["runner"]["delete_before_each_run"] is True:
         if p_folder.exists():
             print("Removing and cloning project...")
             shutil.rmtree(project["runner"]["project_folder"])
-        for x in project["events"]["before_clone"]:
-            print(x)
-            os.system(x)
+        event("before_clone")
         os.system("git clone " + p_url + " " + project["runner"]["project_folder"] + " " +
                   project["git"]["arguments"])
+        event("after_clone")
     else:
         if not p_folder.exists():
             print("Cloning project...")
-            for x in project["events"]["before_clone"]:
-                print(x)
-                os.system(x)
+            event("before_clone")
             os.system("git clone " + p_url + " " + project["runner"]["project_folder"] + " " +
                       project["git"]["arguments"])
+            event("after_clone")
 
+    event("before_pull")
     os.system("cd " + project["runner"]["project_folder"] + " && git stash && git checkout " +
               project["git"]["branch"] + " && git pull")
-
-    for x in project["events"]["after_clone"]:
-        print(x)
-        os.system(x)
+    event("after_pull")
 
     if project["runner"]["just_update"]:
         print("Done. 'Just' updated the repository.")
@@ -79,9 +95,7 @@ while True:
     for x in project["python"]["pip_packages"]:
         os.system(p_vp + " -m pip install " + x + " --upgrade")
 
-    for x in project["events"]["before_run"]:
-        print(x)
-        os.system(x)
+    event("before_run")
 
     os.chdir(p_runner)
     print("Running " + str(p_executable))
@@ -91,9 +105,7 @@ while True:
     print("Process exit code is {}".format(target_run))
     os.chdir(p_folder)
 
-    for x in project["events"]["after_run"]:
-        print(x)
-        os.system(x)
+    event("after_run")
 
     if project["runner"]["run_indefinitely"] is False:
         print("Done. Program ran one time.")
