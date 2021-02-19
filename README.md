@@ -20,32 +20,45 @@ Here's a project example:
 -->
 ```py
 {
+  "project": {                      # Simple project description
+    "name": "Sample project",
+    "desc": "This is a sample project using runner."
+  },
   "git": {
-    "user": "Proxymiity",           # This constructs a GitHub URL:
+    "user": "Proxymiity",           # This builds a GitHub URL:
     "repo": "Alter",                # github.com/Proxymiity/Alter
     "branch": "plugins.moderation", # on the 'plugins.moderation' branch
-    "arguments": "--recursive"      # This tells git to clone recursively
+    "arguments": "--recursive"      # and passes the '--recusrive' flag to git
   },
   "python": {
     "virtualenv": {
       "active": true,               # Enables a virtual environment named 'dvenv'
       "name": "dvenv"
     },
-    "pip_packages": ["discord.py"], # Installs the 'discord.py' package
-    "executable": "python",         # The Python binary. Leave it to 'python' when using venv. MUST be in your path.
-    "folder" : "/",                 # This indicates that your startup code is:
-    "target": "alter.py"            # (runner_path)/alter.py
-  },                                # (You can refer to your Git file structure.)
+    "pip_packages": ["discord.py"], # Runs 'pip install discord.py --upgrade'
+    "executable": "python",         # Specifies the python binary. Leave to 'python' if using venv. Must be in PATH.
+    "folder" : "/",                 # This specifies the location of the file to run:
+    "target": "alter.py"            # /alter.py
+  },                                # (This is relative to your branch. e.g. main/file.py)
   "events": {
     "before_clone": [],             # These events are relative to the parent directory of your repo
     "after_clone" : [],             # This runs '/setup.py' with 'python' and args 'owner 278230133176008704'
     "before_run": ["cd alter && python setup.py owner 278230133176008704"],
     "after_run": []                 # Tip! In this case, the parent directory only have the project.json, runner.py
   },                                # and your project's folder.
+  "events": {
+    "before_clone": [],             # These events are relative to your branch, too.
+    "after_clone" : [],
+    "before_pull": [],
+    "after_pull" : [],              # For example, this runs /setup.py with python and arg 'owner 278230133176008704'
+    "before_run": ["python setup.py owner 278230133176008704"],
+    "after_run": []
+  },
   "runner": {
     "ignore_root_errors": false,    # Ignores the fact that you are using a non-root user (which can lead to errors)
     "run_indefinitely": true,       # Runs in a loop. Not recommended though
     "run_indefinitely_on_nonzeroEC": false, # Continue looping even if there is a non-zero exit code.
+    "sleep_secs_between_runs": 1,   # Number of seconds to wait before restarting your loop. Minimum is 1.
     "delete_before_each_run": false,        # Wipes your repo (in this case '/alter') then clone it again.
     "just_update": false,           # Just updates the repository locally. This will not run any of your code
     "project_folder": "alter"       # The project directory. e.g, in this case, '*/runner/alter'
