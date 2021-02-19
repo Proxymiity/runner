@@ -1,0 +1,39 @@
+{
+  "project": {
+    "name": "Alter Discord Bot",
+    "desc": "Requires 'python' in path, version 3.0 or newer"
+  },
+  "git": {
+    "user": "Proxymiity",
+    "repo": "Alter",
+    "branch": "main",
+    "arguments": "--recursive"
+  },
+  "python": {
+    "virtualenv": {
+      "active": true,
+      "name": "venv"
+    },
+    "pip_packages": ["discord.py[voice]", "mysql-connector-python"],
+    "executable": "python",
+    "folder" : "/",
+    "target": "alter.py"
+  },
+  "events": {
+    "before_clone": [],
+    "after_clone": [],
+    "before_pull": [],
+    "after_pull" : ["cd bot && python config.py data/config.json token INSERT_TOKEN && python config.py data/config.json owner INSERT_OWNER_ID"],
+    "before_run": ["git stash pop"],
+    "after_run": ["git stash"]
+  },
+  "runner": {
+    "ignore_root_errors": false,
+    "run_indefinitely": true,
+    "run_indefinitely_on_nonzeroEC": false,
+    "sleep_secs_between_runs": 5,
+    "delete_before_each_run": false,
+    "just_update": false,
+    "project_folder": "bot"
+  }
+}
