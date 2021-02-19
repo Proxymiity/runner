@@ -10,7 +10,7 @@ import subprocess
 try:
     __version__ = subprocess.check_output(['git', 'rev-parse', '--short', 'HEAD']).decode('utf-8').strip()
 except subprocess.CalledProcessError:
-    __version__ = "Unknown - LKC 0834af"
+    __version__ = "Unknown - LKC f5f72d"
 
 print("Proxymiity/runner - Version " + __version__)
 print("Licensed under the Apache 2 License")
@@ -45,11 +45,13 @@ p_url = "https://github.com/" + project["git"]["user"] + "/" + project["git"]["r
 
 def event(name: str):
     print("Processing event " + name)
-    os.chdir(p_runner)
+    ev_cwd = os.getcwd()
+    if p_runner.exists() and p_runner.is_dir():
+        os.chdir(str(p_folder))
     for y in project["events"][name]:
         print(y)
         os.system(y)
-    os.chdir(p_folder)
+    os.chdir(ev_cwd)
 
 
 while True:
