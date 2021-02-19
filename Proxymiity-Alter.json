@@ -23,7 +23,7 @@
     "before_clone": [],
     "after_clone": [],
     "before_pull": [],
-    "after_pull" : ["cd bot && python config.py data/config.json token INSERT_TOKEN && python config.py data/config.json owner INSERT_OWNER_ID"],
+    "after_pull" : ["python config.py data/config.json token INSERT_TOKEN && python config.py data/config.json owner INSERT_OWNER_ID"],
     "before_run": ["git stash pop"],
     "after_run": ["git stash"]
   },
