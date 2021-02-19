@@ -33,8 +33,8 @@ Here's a project example:
     },
     "pip_packages": ["discord.py"], # Installs the 'discord.py' package
     "executable": "python",         # The Python binary. Leave it to 'python' when using venv. MUST be in your path.
-    "folder" : "/",                 # This indicates that your startup code is
-    "target": "alter.py"            # [wherever_on_your_pc]/alter.py
+    "folder" : "/",                 # This indicates that your startup code is:
+    "target": "alter.py"            # (runner_path)/alter.py
   },                                # (You can refer to your Git file structure.)
   "events": {
     "before_clone": [],             # These events are relative to the parent directory of your repo
