@@ -1,4 +1,8 @@
 {
+  "project": {
+    "name": "Sample project",
+    "desc": "This is a sample project using runner."
+  },
   "git": {
     "user": "Proxymiity",
     "repo": "runner",
@@ -18,6 +22,8 @@
   "events": {
     "before_clone": [],
     "after_clone" : [],
+    "before_pull": [],
+    "after_pull" : [],
     "before_run": [],
     "after_run": []
   },
