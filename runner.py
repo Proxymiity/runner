@@ -76,10 +76,6 @@ while True:
               project["git"]["branch"] + " && git pull")
     event("after_pull")
 
-    if project["runner"]["just_update"]:
-        print("Done. 'Just' updated the repository.")
-        exit(0)
-
     if project["python"]["virtualenv"]["active"] is True:
         os.system("cd " + project["runner"]["project_folder"] + " && " + project["python"]["executable"] + " -m venv " +
                   project["python"]["virtualenv"]["name"])
@@ -98,6 +94,10 @@ while True:
 
     for x in project["python"]["pip_packages"]:
         os.system(p_vp + " -m pip install " + x + " --upgrade")
+
+    if project["runner"]["just_update"]:
+        print("Done. 'Just' updated the repository.")
+        exit(0)
 
     event("before_run")
 
